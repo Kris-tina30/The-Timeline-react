@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Comments from "./Comments";
+import axios from "axios";
 import "../App.css";
 
 export default function Posts({
@@ -13,6 +14,8 @@ export default function Posts({
     userName: "",
     userMessage: "",
   });
+  const [error, setError] = useState("");
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -20,8 +23,18 @@ export default function Posts({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onAddPost(formData);
-    setFormData({ userName: "", userMessage: "" });
+    setError("");
+
+    axios
+      .post("http://localhost:2100/posts", formData)
+      .then((result) => {
+        onAddPost(formData);
+
+        setFormData({ userName: "", userMessage: "" });
+      })
+      .catch((error) => {
+        setError(error.response.data.message);
+      });
   };
   return (
     <div>
@@ -50,6 +63,7 @@ export default function Posts({
         <button className="btn post" type="submit">
           Post a message
         </button>
+        <h4 className="err-msg">{error && error}</h4>
       </form>
 
       <div className="post-data">

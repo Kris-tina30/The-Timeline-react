@@ -89,3 +89,6 @@ input {
   background-color: rgb(237, 49, 49);
   color: rgb(255, 255, 255);
 }
+.err-msg {
+  color: rgb(237, 49, 49);
+}
